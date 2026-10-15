@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>login</title>
+<link href="login.css" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container" id="container">
+    <div class="form-container sign-up">
+        <form action="auth.html" method="POST">
+        <h1>create account</h1>
+        <div class="social-icons">
+            <a href="#" class="icon"><i class="fa fa-google-plus"></i></a>
+            <a href="#" class="icon"><i class="fa fa-facebook-f"></i></a>
+            <a href="#" class="icon"><i class="fa fa-github"></i></a>
+            <a href="#" class="icon"><i class="fa fa-linkedin"></i></a>
+            </div>
+            <span>or use your email for registeration</span>
+            <input type="text" name="signup_name" placeholder="name" required>
+            <input type="email" name="signup_email" placeholder="email" required>
+            <input type="password" name="signup_password" placeholder="password" required>
+            <button type="submit" name="signup_btn">Sign Up</button>
+        </form>
+        </div>
+         <div class="form-container sign-in">
+        <form action="auth.html" method="POST">
+        <h1>Sign In</h1>
+        <div class="social-icons">
+            <a href="#" class="icon"><i class="fa fa-google-plus"></i></a>
+            <a href="#" class="icon"><i class="fa fa-facebook-f"></i></a>
+            <a href="#" class="icon"><i class="fa fa-github"></i></a>
+            <a href="#" class="icon"><i class="fa fa-linkedin"></i></a>
+            </div>
+            <span>or use your email password</span>
+            <input type="email" name="signin_email" placeholder="email" required>
+            <input type="password" name="signin_password" placeholder="password" required>
+            <a href="#">forgot your password?</a>
+            <button type="submit" name="signin_btn">Sign In</button>
+        </form>
+        </div>
+        <div class="toggle-container">
+        <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>&nbsp;</h1>
+          <h1>welcone back!</h1>
+            <p>enter your personal details to use all of site features</p>
+            <button class="hidden" id="login">Sign In</button>
+          </div>
+               <div class="toggle-panel toggle-right">
+            <h1>hi friend</h1>
+            <p>register with personal details to use all of site features</p>
+            <button class="hidden" id="register">Sign Up</button>
+            </div>
+            </div>    
+        </div>
+    </div>
+    
+    
+    
+    <script>
+    
+        window.onload = function(){
+
+const container = document.getElementById('container');
+const registerBtn = document.getElementById('register');
+const loginBtn = document.getElementById('login');
+
+
+registerBtn.onclick = function(){
+    container.classList.add("active");
+}
+
+
+loginBtn.onclick = function(){
+    container.classList.remove("active");
+}
+
+}
+        
+    </script>
+</body>
+</html>

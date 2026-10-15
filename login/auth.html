@@ -1,0 +1,72 @@
+<?php
+// اطلاعات اتصال به دیتابیس در XAMPP
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'login_project_db';
+
+try {
+    // اتصال با PDO
+    $conn = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        // --- ۱. پردازش ثبت‌نام (Sign Up) ---
+        if (isset($_POST['signup_btn'])) {
+            $name = trim($_POST['signup_name']);
+            $email = trim($_POST['signup_email']);
+            $pass  = trim($_POST['signup_password']);
+
+            if (!empty($name) && !empty($email) && !empty($pass)) {
+                // هش کردن رمز عبور برای امنیت
+                $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
+                // چک کردن تکراری نبودن ایمیل
+                $checkStmt = $conn->prepare("SELECT id FROM users WHERE email = :email");
+                $checkStmt->execute([':email' => $email]);
+
+                if ($checkStmt->rowCount() > 0) {
+                    echo "<script>alert('این ایمیل قبلاً ثبت‌نام شده است!'); window.history.back();</script>";
+                } else {
+                    $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute([
+                        ':name' => $name,
+                        ':email' => $email,
+                        ':password' => $hashed_password
+                    ]);
+
+                    echo "<script>alert('ثبت‌نام با موفقیت انجام شد! اکنون وارد شوید.'); window.location.href = 'index.php';</script>";
+                }
+            } else {
+                echo "<script>alert('لطفاً تمام فیلدها را پر کنید.'); window.history.back();</script>";
+            }
+        }
+
+        // --- ۲. پردازش ورود (Sign In) ---
+        if (isset($_POST['signin_btn'])) {
+            $email = trim($_POST['signin_email']);
+            $pass  = trim($_POST['signin_password']);
+
+            if (!empty($email) && !empty($pass)) {
+                $sql = "SELECT * FROM users WHERE email = :email";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([':email' => $email]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                // بررسی وجود کاربر و تطابق رمز عبور هش شده
+                if ($user && password_verify($pass, $user['password'])) {
+                    echo "<script>alert('خوش آمدید، " . $user['name'] . " عزیز!'); window.location.href = 'index.php';</script>";
+                } else {
+                    echo "<script>alert('ایمیل یا رمز عبور اشتباه است.'); window.history.back();</script>";
+                }
+            } else {
+                echo "<script>alert('لطفاً ایمیل و رمز عبور را وارد کنید.'); window.history.back();</script>";
+            }
+        }
+    }
+} catch (PDOException $e) {
+    echo "خطا در اتصال به پایگاه داده: " . $e->getMessage();
+}
+?>
